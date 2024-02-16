@@ -29,11 +29,10 @@
                           :host    host
                           :handler hello-handler}}]
           server (create-server conf)
-
+          url (str "http://" host ":" port)
           {body         :body
            status       :status
-           content-type :content-type} (-> (str "http://" host ":" port)
-                                           http/get)
+           content-type :content-type} (http/get url)
 
           _ (.stop server)]
       (is (= body "hello")))))
