@@ -4,13 +4,12 @@
 #+KEYWORDS:  undertow, http, https, web server, undertow handlers
 #+LANGUAGE:  en
 
-* undertow-clj
-** summary
+* summary
 undertow-clj contains functions to help run a undertow server, handlers, and
 other useful utils.
 
-** license
-Copyright 2024 Justin Bishop
+* license
+copyright 2024 Justin Bishop
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

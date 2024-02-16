@@ -26,7 +26,6 @@
 (def print-handler
   (reify HttpHandler
     (handleRequest [_ exchange]
-      (def my-exchange exchange)
       (println {:headers (.getRequestHeaders exchange)})
       (-> exchange
           .getResponseHeaders
