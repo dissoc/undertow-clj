@@ -4,9 +4,28 @@
 #+KEYWORDS:  undertow, http, https, web server, undertow handlers
 #+LANGUAGE:  en
 
-* summary
 undertow-clj contains functions to help run a undertow server, handlers, and
 other useful utils.
+
+* examples
+
+** allowlist handler
+You can use the allowlist handler to restrict the sources that make a request.
+For example, if you use cloudflare you can obtain lists of their IP addresses
+and this can be used to limit the cloudflare proxy connectors. Note: it would
+also be good to implement mTLS.
+
+#+BEGIN_SRC clojure
+  (require '[undertow-clj.handlers.ip-access])
+
+  (defn get-cloudflare-ips []
+    (hato.client/get "https://api.cloudflare.com/client/v4/ips" {:as :json}))
+
+  (def cloudflare-handler  (-> (get-cloudflare-ips)
+                               parse-json
+                               format-ips
+                               allowlist-handler)
+#+END_SRC
 
 * license
 copyright 2024 Justin Bishop
@@ -15,7 +34,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
