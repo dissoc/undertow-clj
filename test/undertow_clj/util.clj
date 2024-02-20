@@ -9,15 +9,16 @@
    (io.undertow.util Headers StatusCodes)))
 
 (defn run-server
-  [handler & {:keys [port host]
+  [handler & {:keys [port host request-path]
               :or   {port 50080
                      host "127.0.0.1"}}]
   (let [conf     [{:http {:port    port
                           :host    host
                           :handler handler}}]
         server   (create-server conf)
-        url      (str "http://" host ":" port)
-        response (http/get url {:throw-exceptions? false})
+        url      (str "http://" host ":" port request-path)
+        response (http/get url {:throw-exceptions? false
+                                :redirect-policy   :never})
         _        (.stop server)]
     response))
 
