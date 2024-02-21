@@ -5,13 +5,13 @@
    [clojure.test :refer :all]
    [undertow-clj.handlers.ip-access :refer [allowlist-handler]]
    [undertow-clj.handlers.redirect :refer [http->https-redirect-handler]]
-   [undertow-clj.util :as util :refer [run-server]]))
+   [undertow-clj.util :as util :refer [run-server->response]]))
 
 (deftest allowlist-handler-test
   (testing "Testing forbidden access"
     (let [response                     (-> {:ipv4-cidrs ["1.2.3.4/32"]}
                                            (allowlist-handler)
-                                           (run-server :port 50324))
+                                           (run-server->response :port 50324))
           {body         :body
            status       :status
            content-type :content-type} response]
@@ -20,7 +20,7 @@
   (testing "Testing allowed access"
     (let [response                     (-> {:ipv4-cidrs ["127.0.0.1/32"]}
                                            (allowlist-handler)
-                                           (run-server))
+                                           (run-server->response))
           {body         :body
            status       :status
            content-type :content-type} response]
@@ -32,7 +32,7 @@
   (testing "redirect no port or host provided"
     (let [handler                      (http->https-redirect-handler)
           response                     (-> (http->https-redirect-handler)
-                                           (run-server :port 50324))
+                                           (run-server->response :port 50324))
           {body         :body
            status       :status
            headers      :headers
@@ -43,7 +43,7 @@
   (testing "redirect no port or host provided with path"
     (let [handler                      (http->https-redirect-handler)
           response                     (-> (http->https-redirect-handler)
-                                           (run-server :port 50324
+                                           (run-server->response :port 50324
                                                        :request-path "/my/path"))
           {body         :body
            status       :status
@@ -57,7 +57,7 @@
                                         :redirect-host "localhost"
                                         :redirect-port 54321)
           response                     (-> handler
-                                           (run-server :port 50324))
+                                           (run-server->response :port 50324))
           {body         :body
            status       :status
            headers      :headers
